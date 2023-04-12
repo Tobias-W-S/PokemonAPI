@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import './PokeAPI.css'
-import PokeHealthBar from '../HP.svg'
 
 const SinglePokeAPI = () => {
     const link = window.location.href;

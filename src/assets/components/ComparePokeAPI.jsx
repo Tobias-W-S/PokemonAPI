@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import './PokeAPI.css'
 
-const ComparePokeAPI = () => {
+const SinglePokeAPI = () => {
     const link = window.location.href;
     let linkID = link.split('/');
     //console.log(linkID.slice(-1));
@@ -38,8 +38,10 @@ const ComparePokeAPI = () => {
                 weight: data.weight,
                 height: data.height,
                 exp: data.base_experience,
-                abilities: data.abilities.map((ability) => ability.ability.name ),
 
+                health: data.stats.find(stat => stat.stat.name === 'hp').base_stat,
+
+                abilities: data.abilities.map((ability => ability.ability.name)),
                 species: data.species.url,
             }))
         );
@@ -47,6 +49,7 @@ const ComparePokeAPI = () => {
         setPokemonSpeciesList(
             pokemonSpecies.map((data) =>({
                 flavortext: data.flavor_text_entries.find(entry => entry.language.name === "en").flavor_text,
+                evolves: data.evolves_from_species ? [data.evolves_from_species.name] : [],
             }))
         )
     }
@@ -76,43 +79,50 @@ const ComparePokeAPI = () => {
                     Go forward
                 </button>
             </div>
-            <div className='flex justify-center items-center'>
+            <div className="flex justify-center items-center">
                 {
                     pokemonList.map((pokemon) => (
                     pokemonSpeciesList.map((species) =>(
-                        <div key={pokemon.id} className={`flex rounded-2xl w-10/12 ${pokemon.types.map((type) => `${type}-type`).join(" ")}`}>
+                        <div key={pokemon.id} className={`flex px-4 rounded-2xl w-10/12 gap-3 ${pokemon.types.map((type) => `${type}-type`).join(" ")}`}>
                         <div className="w-1/5 flex flex-col justify-center items-center p-5 gap-3">
-                            <h2 className='text-2xl font-medium flex justify-center px-2 py-0.5 rounded-2xl bg-black/[0.4] text-gray-300'>{pokemon.id}. {pokemon.name}</h2>  
-                            <img src={pokemon.sprite} className="w-full bg-neutral-50/[.6] rounded-full"/> 
-                            <div className='flex justify-center items center gap-2'>
+                            <div className="flex items-center justify-center font-pixel w-64 h-16 bg-contain bg-[url('/src/assets/Name.svg')]">{pokemon.id}. {pokemon.name}</div>  
+                            <img src={pokemon.sprite} className="w-full bg-contain bg-[url('/src/assets/ImageTransparent.svg')]"/> 
+                            <div className="flex items-center justify-end font-pixel pr-12 w-48 h-16 bg-contain bg-[url('/src/assets/HP.svg')]">
+                                {pokemon.health}
+                            </div>
+                            <div className="flex justify-center items center gap-2">
                                 {pokemon.types.map((type) =>(
-                                    <div className='flex justify-center px-2 py-0.5 rounded-2xl bg-neutral-50/50'>{type}</div>
+                                    <div className="flex w-32 h-8 justify-center items-center font-pixel bg-contain bg-[url('/src/assets/Name.svg')]">{type}</div>
                                 ))}
                             </div>
                         </div>
-                        <div className='flex flex-row items-center justify-center gap-3'>   
-                            <div className="flex justify-center">
-                                {species.flavortext.replace(new RegExp('\f', 'g'), ' ')}
+                        <div className="flex flex-row items-center gap-3 w-2/4">   
+                            <div className="flex justify-center w-fit px-2 py-1 rounded-2xl bg-neutral-50/50">
+                                {species.flavortext.replace(new RegExp('\f', 'g'), ' ').replace(new RegExp('POKéMON', 'g'), 'Pokemon')}
                             </div>
-                            <div className='flex flex-col gap-3'>
+                            <div className="flex flex-col gap-3 w-5/6">
                                 <div className="flex justify-center px-2 py-1 rounded-2xl bg-neutral-50/50">
                                     Base experience: {pokemon.exp} xp
                                 </div>
-                                <div className='flex justify-center px-2 py-1 rounded-2xl bg-neutral-50/50'>
+                                <div className="flex justify-center px-2 py-1 rounded-2xl bg-neutral-50/50">
                                     Weight: {pokemon.weight} hg
                                 </div>
                                 <div className="flex justify-center px-2 py-1 rounded-2xl bg-neutral-50/50">
                                     Height: {pokemon.height} dm
                                 </div>
+                                {species.evolves != "" ?                             
+                                <div className="flex justify-center px-2 py-1 rounded-2xl bg-neutral-50/50">
+                                    Evolves from: {species.evolves}
+                                </div> 
+                                : ''}
                             </div>
-                            <div className="flex flex-col gap-3 flex justify-center p-3 rounded-2xl bg-neutral-50/50">
-                                Abilities: 
-                                {pokemon.abilities.map((ability) =>(
-                                    <div>{ability}</div>
-                                ))}
+                            <div className="flex gap-3 flex-col w-3/5">
+                                <div className="flex justify-center px-2 py-1 rounded-2xl bg-black/[0.4] text-gray-300">Abilities</div>
+                                {pokemon.abilities.map((ability) => 
+                                    <div className="flex justify-center px-2 py-1 rounded-2xl bg-neutral-50/50">{ability}</div>
+                                )}
                             </div>
                         </div>
-
                     </div>
                     ))
                     ))
@@ -122,4 +132,4 @@ const ComparePokeAPI = () => {
     )
 }
 
-export default ComparePokeAPI;
+export default SinglePokeAPI;

@@ -1,7 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import App from './App'
 import PokeAPI from './assets/components/PokeAPI'
 import SinglePokeAPI from './assets/components/SinglePokeAPI'
 import ComparePokeAPI from './assets/components/ComparePokeAPI'
